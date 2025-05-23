@@ -1,0 +1,33 @@
+﻿@model CryptoPage.Views.ViewModels.CryptoViewModels
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Pricecs for choosen crypto</h2>
+<a asp-action="Index" class="btn btn-secondary">Bo back to main page</a>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Symbol</th>
+            <th>CoinGecko Price</th>
+            <th>Binance Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var coin in Model.Coin)
+        {
+            if (Model.Price != null && Model.Price.TryGetValue(coin.Id, out var price))
+            {
+                <tr>
+                    <td>@coin.Name </td>
+                <td>@coin.Symbol</td>
+                <td class="text-end">
+                    @price.Usd
+                </td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>

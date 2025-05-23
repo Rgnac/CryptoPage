@@ -1,0 +1,61 @@
+﻿@model CryptoPage.Views.ViewModels.CryptoViewModels
+
+<h2>CoinGecko Prices</h2>
+
+<!-- Pole wyszukiwania -->
+<form id="searchForm" method="get" asp-action="Index">
+    <input type="text" id="searchInput" name="search_CryptoName" placeholder="Enter crypto name" value="@Model.search_CryptoName" autocomplete="off" />
+</form>
+
+<!-- Formularz do zaznaczenia kryptowalut i wysłania do Prices -->
+<form asp-action="Prices" method="get" id="pricesForm">
+    <button type="submit" class="btn btn-primary">Pokaż szczegóły</button>
+
+    <div id="cryptoTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Selected</th>
+                    <th>Nazwa</th>
+                    <th>Symbol</th>
+                    <th>Id</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var coin in Model.Coin)
+                {
+                    <tr>
+                        <td><input name="selectedIds" value="@coin.Id" type="checkbox" /></td>
+                        <td>@coin.Name</td>
+                        <td>@coin.Symbol</td>
+                        <td>@coin.Id</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $("#searchInput").on("input", function () {
+                var searchValue = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("Filter")',
+                    type: 'GET',
+                    data: { search_CryptoName: searchValue },
+                    success: function (result) {
+                        // Podmieniamy zawartość tabeli w formularzu Prices
+                        $("#cryptoTable").html(result);
+                    },
+                    error: function () {
+                        console.error("Błąd przy pobieraniu danych.");
+                    }
+                });
+            });
+        });
+    </script>
+}

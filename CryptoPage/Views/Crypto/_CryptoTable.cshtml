@@ -1,0 +1,23 @@
+﻿@model CryptoPage.Views.ViewModels.CryptoViewModels
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Selected</th>
+            <th>Nazwa</th>
+            <th>Symbol</th>
+            <th>Id</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var coin in Model.Coin)
+        {
+            <tr>
+                <td><input name="selectedIds" value="@coin.Id" type="checkbox" /></td>
+                <td>@coin.Name</td>
+                <td>@coin.Symbol</td>
+                <td>@coin.Id</td>
+            </tr>
+        }
+    </tbody>
+</table>
