@@ -8,5 +8,7 @@ namespace CryptoPage.Views.ViewModels
         public Dictionary<string,CryptoDetails> Price { get; set; }
 
         public string search_CryptoName { get; set; }
+
+        public List<BinanceTicker> BinanceCoin { get; set; }
     }
 }

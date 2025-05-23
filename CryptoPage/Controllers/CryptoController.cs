@@ -16,9 +16,12 @@ public class CryptoController : Controller
 
     public async Task<IActionResult> Index( string search_CryptoName)
     {
+        //List<BinanceTicker> data = await _cryptoService.getBinanceCoins(); //to get new coinlist from binance
+        List<BinanceTicker> cryptos_binance = await _cryptoService.GetCryptoFromDatabaseAsync_binance();
+       // await _cryptoService.SaveOrUpdateCryptoTable_binance(cryptos_binance); //to update data with new coin
         //List<CryptoCurrency> cryptos = await _cryptoService.GetCryptoPricesAsync(); //to get new coinlist from coingecko
         List<CryptoCurrency> cryptos = await _cryptoService.GetCryptoFromDatabaseAsync();
-        await _cryptoService.SaveOrUpdateCryptoTable(cryptos);
+        //await _cryptoService.SaveOrUpdateCryptoTable(cryptos); //to update data with new coins
         var viewModel = new CryptoViewModels
         {
             Coin = cryptos,
@@ -67,6 +70,18 @@ public class CryptoController : Controller
 
         return View(viewModel);
         
+    }
+
+    public async Task<IActionResult> Crypto_SideBySide()
+    {
+        List<BinanceTicker> cryptos_binance = await _cryptoService.GetCryptoFromDatabaseAsync_binance();
+        List<CryptoCurrency> cryptos = await _cryptoService.GetCryptoFromDatabaseAsync();
+        CryptoViewModels viewModel = new CryptoViewModels();
+        
+        viewModel.Coin = cryptos;
+        viewModel.BinanceCoin = cryptos_binance; 
+
+        return View("Crypto_SideBySide",viewModel);
     }
     
 }

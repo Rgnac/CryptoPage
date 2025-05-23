@@ -8,6 +8,10 @@ using System.Text.Json.Serialization;
 using RestSharp;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Binance.Common;
+using Binance.Spot;
+using Binance.Spot.Models;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
 public class CryptoService
 {
@@ -81,6 +85,43 @@ public class CryptoService
     {
         return await _context.Cryptos.ToListAsync();
     }
+
+    public async Task<List<BinanceTicker>> getBinanceCoins()
+    {
+        var market = new Market();
+        var response = await market.ExchangeInformation();
+        using var doc =JsonDocument.Parse(response);
+        var symbolsJson = doc.RootElement.GetProperty("symbols").GetRawText();
+        var binanceList = JsonSerializer.Deserialize<List<BinanceTicker>>(symbolsJson);
+        return binanceList;
+    }
+
+    public async Task SaveOrUpdateCryptoTable_binance(List<BinanceTicker> cryptosList)
+    {
+        if (cryptosList == null || cryptosList.Count == 0) return;
+
+        foreach (var coin in cryptosList)
+        {
+            var existiCoin = await _context.binanceCryptos.FindAsync(coin.Symbol);
+            if (existiCoin == null)
+            {
+                _context.binanceCryptos.Add(coin);
+            }
+            else
+            {
+                existiCoin.Symbol = coin.Symbol;
+                existiCoin.BaseAsset = coin.BaseAsset;
+                existiCoin.QuoteAsset = coin.QuoteAsset;
+            }
+        }
+        await _context.SaveChangesAsync();
+
+    }
+    public async Task<List<BinanceTicker>> GetCryptoFromDatabaseAsync_binance()
+    {
+        return await _context.binanceCryptos.ToListAsync();
+    }
+
 
 }
 

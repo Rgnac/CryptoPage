@@ -6,7 +6,9 @@
 <form id="searchForm" method="get" asp-action="Index">
     <input type="text" id="searchInput" name="search_CryptoName" placeholder="Enter crypto name" value="@Model.search_CryptoName" autocomplete="off" />
 </form>
-
+<form asp-action="Crypto_SideBySide" method="get" id="CoinBySide">
+    <button type="submit" class="btn btn-dark" >Crypto List Compare</button>
+</form>
 <!-- Formularz do zaznaczenia kryptowalut i wysłania do Prices -->
 <form asp-action="Prices" method="get" id="pricesForm">
     <button type="submit" class="btn btn-primary">Pokaż szczegóły</button>

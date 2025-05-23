@@ -1,0 +1,18 @@
+﻿@model CryptoPage.Views.ViewModels.CryptoViewModels
+<form asp-action="Index" method="get">
+    <button type="submit" class="btn btn-dark">Back to Main</button>
+</form>
+
+<table>
+    <tr>
+        <th>Coingecko Symobl</th>
+        <th>Binance Symbol</th>
+    </tr>
+    @for(int i = 0; i < Math.Max(Model.Coin.Count, Model.BinanceCoin.Count); i++){
+            <tr>
+                <th>@(i < Model.Coin.Count ? Model.Coin[i].Symbol : "Empty")</th>
+                <th>@(i < Model.BinanceCoin.Count ? Model.BinanceCoin[i].Symbol : "Empty")</th>
+            </tr>
+        }
+    
+</table>
